@@ -4,87 +4,289 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Placement Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
-    <div class="page-container">
-      <header>
-        <h1>Student Placement Predictor</h1>
-        <p>Predict whether a student will be placed using CGPA, mock performance, academic performance, communication skills, and internship experience.</p>
-      </header>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-dark bg-gradient sticky-top">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">
+          <i class="fas fa-graduation-cap me-2"></i>
+          <strong>Campus Placer</strong>
+        </span>
+        <span class="text-white-50 small">Powered by AI</span>
+      </div>
+    </nav>
 
-      <form id="prediction-form" class="prediction-form">
-        <div class="input-row">
-          <label for="cgpa">CGPA (0-10)</label>
-          <input id="cgpa" name="cgpa" type="number" step="0.1" min="0" max="10" value="7.5" required />
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="container">
+        <div class="row align-items-center min-vh-100">
+          <div class="col-lg-6">
+            <div class="hero-content">
+              <h1 class="display-4 fw-bold mb-4">
+                Your Placement <span class="gradient-text">Success Predictor</span>
+              </h1>
+              <p class="lead mb-4 text-muted">
+                Get instant AI-powered insights into your campus placement prospects. Analyze your academic metrics and predict your placement success with high accuracy.
+              </p>
+              <div class="feature-list">
+                <div class="feature-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  <span>Instant Predictions</span>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-bolt text-warning me-2"></i>
+                  <span>ML-Powered Analysis</span>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-shield-alt text-info me-2"></i>
+                  <span>Accurate Results</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="prediction-container">
+              <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                  <h2 class="card-title mb-4">
+                    <i class="fas fa-magic"></i> Predict Your Future
+                  </h2>
+
+                  <form id="prediction-form" class="prediction-form">
+                    <div class="form-group mb-4">
+                      <label for="cgpa" class="form-label fw-600">CGPA <span class="badge bg-info">0-10</span></label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="fas fa-graduation-cap text-primary"></i>
+                        </span>
+                        <input
+                          id="cgpa"
+                          name="cgpa"
+                          type="number"
+                          class="form-control border-start-0"
+                          step="0.1"
+                          min="0"
+                          max="10"
+                          value="7.5"
+                          placeholder="Enter your CGPA"
+                          required
+                        />
+                      </div>
+                      <small class="text-muted">Your cumulative GPA</small>
+                    </div>
+
+                    <div class="form-group mb-4">
+                      <label for="mock_performance" class="form-label fw-600">Mock Performance <span class="badge bg-success">0-100</span></label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="fas fa-chart-bar text-success"></i>
+                        </span>
+                        <input
+                          id="mock_performance"
+                          name="mock_performance"
+                          type="number"
+                          class="form-control border-start-0"
+                          step="0.1"
+                          min="0"
+                          max="100"
+                          value="75"
+                          placeholder="Enter your mock test score"
+                          required
+                        />
+                      </div>
+                      <small class="text-muted">Your mock test performance score</small>
+                    </div>
+
+                    <div class="form-group mb-4">
+                      <label for="academic_performance" class="form-label fw-600">Academic Performance <span class="badge bg-warning">0-100</span></label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="fas fa-book text-warning"></i>
+                        </span>
+                        <input
+                          id="academic_performance"
+                          name="academic_performance"
+                          type="number"
+                          class="form-control border-start-0"
+                          step="0.1"
+                          min="0"
+                          max="100"
+                          value="80"
+                          placeholder="Enter your academic score"
+                          required
+                        />
+                      </div>
+                      <small class="text-muted">Your overall academic performance</small>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group mb-4">
+                          <label for="communication" class="form-label fw-600">Communication</label>
+                          <select id="communication" name="communication" class="form-select">
+                            {% for option in communication_options %}
+                            <option value="{{ option }}">{{ option }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-group mb-4">
+                          <label for="internship" class="form-label fw-600">Internship Done</label>
+                          <select id="internship" name="internship" class="form-select">
+                            {% for option in internship_options %}
+                            <option value="{{ option }}">{{ option }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-gradient w-100 btn-lg fw-bold">
+                      <i class="fas fa-wand-magic-sparkles me-2"></i>
+                      Predict My Placement
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div class="input-row">
-          <label for="mock_performance">Mock Performance (0-100)</label>
-          <input id="mock_performance" name="mock_performance" type="number" step="0.1" min="0" max="100" value="75" required />
-        </div>
-
-        <div class="input-row">
-          <label for="academic_performance">Academic Performance (0-100)</label>
-          <input id="academic_performance" name="academic_performance" type="number" step="0.1" min="0" max="100" value="80" required />
-        </div>
-
-        <div class="input-row">
-          <label for="communication">Communication</label>
-          <select id="communication" name="communication">
-            {% for option in communication_options %}
-            <option value="{{ option }}">{{ option }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div class="input-row">
-          <label for="internship">Internship Done</label>
-          <select id="internship" name="internship">
-            {% for option in internship_options %}
-            <option value="{{ option }}">{{ option }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <button type="submit" class="primary-button">Predict Placement</button>
-      </form>
-
-      <div id="result-card" class="result-card hidden">
-        <h2>Prediction Result</h2>
-        <p id="result-text"></p>
-        <p id="confidence-text"></p>
       </div>
     </div>
 
+    <!-- Result Section -->
+    <div id="result-section" class="result-section hidden">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6">
+            <div id="result-card" class="card result-card shadow-lg border-0">
+              <div class="card-body p-5">
+                <div class="result-icon mb-4 text-center">
+                  <i id="result-icon" class="fas fa-check-circle"></i>
+                </div>
+                <h2 class="card-title text-center mb-3">Prediction Result</h2>
+                <div id="result-content">
+                  <p id="result-text" class="result-prediction-text"></p>
+                  <p id="confidence-text" class="result-confidence-text"></p>
+                </div>
+                <div class="progress-container mt-4 hidden" id="confidence-bar-container">
+                  <div class="progress">
+                    <div id="confidence-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                  </div>
+                  <small class="text-muted mt-2 d-block" id="confidence-label"></small>
+                </div>
+                <button class="btn btn-outline-primary w-100 mt-4" onclick="resetForm()">
+                  <i class="fas fa-redo me-2"></i>
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="spinner-overlay hidden">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3 text-white">Analyzing your data...</p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 py-4 bg-dark text-white-50">
+      <div class="container text-center">
+        <p class="mb-0">&copy; 2026 Campus Placer | AI-Powered Student Placement Prediction</p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       const form = document.getElementById('prediction-form');
       const resultCard = document.getElementById('result-card');
+      const resultSection = document.getElementById('result-section');
       const resultText = document.getElementById('result-text');
       const confidenceText = document.getElementById('confidence-text');
+      const resultIcon = document.getElementById('result-icon');
+      const loadingSpinner = document.getElementById('loading-spinner');
+      const confidenceBarContainer = document.getElementById('confidence-bar-container');
+      const confidenceBar = document.getElementById('confidence-bar');
+      const confidenceLabel = document.getElementById('confidence-label');
 
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(form);
 
-        const response = await fetch('/predict', {
-          method: 'POST',
-          body: formData,
-        });
+        loadingSpinner.classList.remove('hidden');
 
-        const data = await response.json();
-        resultCard.classList.remove('hidden');
+        try {
+          const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData,
+          });
 
-        if (data.status === 'success') {
-          resultText.textContent = `Prediction: ${data.prediction}`;
-          confidenceText.textContent = `Confidence: ${data.confidence}`;
-          resultCard.classList.remove('error');
-        } else {
-          resultText.textContent = `Error: ${data.message}`;
+          const data = await response.json();
+          loadingSpinner.classList.add('hidden');
+          resultSection.classList.remove('hidden');
+
+          if (data.status === 'success') {
+            const prediction = data.prediction;
+            const confidence = parseFloat(data.confidence);
+
+            resultText.innerHTML = `
+              <strong class="display-6">${prediction}</strong>
+              <p class="mt-2 mb-0">Your placement prediction</p>
+            `;
+
+            if (prediction === 'Yes') {
+              resultIcon.className = 'fas fa-check-circle text-success';
+              resultCard.classList.remove('error');
+              resultCard.classList.add('success');
+              confidenceBar.classList.add('bg-success');
+            } else {
+              resultIcon.className = 'fas fa-exclamation-circle text-warning';
+              resultCard.classList.remove('error');
+              resultCard.classList.remove('success');
+              confidenceBar.classList.remove('bg-success');
+            }
+
+            confidenceText.textContent = '';
+            confidenceBarContainer.classList.remove('hidden');
+            const confidenceValue = parseFloat(data.confidence);
+            confidenceBar.style.width = (confidenceValue * 100) + '%';
+            confidenceLabel.textContent = `Confidence: ${data.confidence}`;
+          } else {
+            resultIcon.className = 'fas fa-times-circle text-danger';
+            resultText.textContent = `Error: ${data.message}`;
+            confidenceText.textContent = '';
+            resultCard.classList.add('error');
+            confidenceBarContainer.classList.add('hidden');
+          }
+
+          window.scrollTo({ top: resultSection.offsetTop - 100, behavior: 'smooth' });
+        } catch (error) {
+          loadingSpinner.classList.add('hidden');
+          resultSection.classList.remove('hidden');
+          resultIcon.className = 'fas fa-times-circle text-danger';
+          resultText.textContent = `Error: ${error.message}`;
           confidenceText.textContent = '';
           resultCard.classList.add('error');
         }
       });
+
+      function resetForm() {
+        form.reset();
+        resultSection.classList.add('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     </script>
   </body>
 </html>
