@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Placement Predictor</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="page-container">
+      <header>
+        <h1>Student Placement Predictor</h1>
+        <p>Predict whether a student will be placed using CGPA, mock performance, academic performance, communication skills, and internship experience.</p>
+      </header>
+
+      <form id="prediction-form" class="prediction-form">
+        <div class="input-row">
+          <label for="cgpa">CGPA (0-10)</label>
+          <input id="cgpa" name="cgpa" type="number" step="0.1" min="0" max="10" value="7.5" required />
+        </div>
+
+        <div class="input-row">
+          <label for="mock_performance">Mock Performance (0-100)</label>
+          <input id="mock_performance" name="mock_performance" type="number" step="0.1" min="0" max="100" value="75" required />
+        </div>
+
+        <div class="input-row">
+          <label for="academic_performance">Academic Performance (0-100)</label>
+          <input id="academic_performance" name="academic_performance" type="number" step="0.1" min="0" max="100" value="80" required />
+        </div>
+
+        <div class="input-row">
+          <label for="communication">Communication</label>
+          <select id="communication" name="communication">
+            {% for option in communication_options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="input-row">
+          <label for="internship">Internship Done</label>
+          <select id="internship" name="internship">
+            {% for option in internship_options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <button type="submit" class="primary-button">Predict Placement</button>
+      </form>
+
+      <div id="result-card" class="result-card hidden">
+        <h2>Prediction Result</h2>
+        <p id="result-text"></p>
+        <p id="confidence-text"></p>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById('prediction-form');
+      const resultCard = document.getElementById('result-card');
+      const resultText = document.getElementById('result-text');
+      const confidenceText = document.getElementById('confidence-text');
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+
+        const response = await fetch('/predict', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await response.json();
+        resultCard.classList.remove('hidden');
+
+        if (data.status === 'success') {
+          resultText.textContent = `Prediction: ${data.prediction}`;
+          confidenceText.textContent = `Confidence: ${data.confidence}`;
+          resultCard.classList.remove('error');
+        } else {
+          resultText.textContent = `Error: ${data.message}`;
+          confidenceText.textContent = '';
+          resultCard.classList.add('error');
+        }
+      });
+    </script>
+  </body>
+</html>
