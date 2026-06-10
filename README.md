@@ -2,6 +2,12 @@
 
 A machine learning project that predicts whether a student will be placed or not using key features such as CGPA, mock performance, academic performance, communication skills, and internship experience.
 
+## Screenshot
+
+![Student Placement Predictor](assets/screenshot.png)
+
+Place the screenshot image at `assets/screenshot.png` so it renders here.
+
 ## 📁 Project Structure
 
 ```
